@@ -655,15 +655,15 @@ create_html_viewer() {
             const tooltipRect = tooltip.getBoundingClientRect();
             
             let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-            let top = rect.top - tooltipRect.height - 10;
+            let top = rect.top + window.pageYOffset - tooltipRect.height - 10;
             
             // Adjust if tooltip goes off screen
             if (left < 10) left = 10;
             if (left + tooltipRect.width > window.innerWidth - 10) {
                 left = window.innerWidth - tooltipRect.width - 10;
             }
-            if (top < 10) {
-                top = rect.bottom + 10;
+            if (top < window.pageYOffset + 10) {
+                top = rect.bottom + window.pageYOffset + 10;
             }
             
             tooltip.style.left = left + 'px';
