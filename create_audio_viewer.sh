@@ -113,24 +113,70 @@ create_html_viewer() {
             margin-bottom: 20px;
         }
         
+        /* Custom SVG Play/Pause Button */
         .play-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 24px;
+            display: inline-block;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: all 0.5s ease;
+            position: relative;
+            border: none;
+            background: transparent;
+            padding: 0;
         }
-        
-        .play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+
+        .play-btn svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        .btn-circle {
+            stroke: #333;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: all 0.5s ease-in-out;
+            opacity: 0.3;
+        }
+
+        .play-icon {
+            transition: all 0.7s ease-in-out;
+            stroke-dasharray: 180;
+            stroke-dashoffset: 360;
+            stroke: #333;
+            stroke-width: 2;
+            fill: none;
+            transform: translateY(0);
+        }
+
+        .pause-bars {
+            stroke: #333;
+            stroke-width: 2;
+            stroke-dasharray: 40;
+            stroke-dashoffset: 0;
+            transition: all 0.6s ease-in-out;
+            opacity: 0;
+        }
+
+        .play-btn:hover .play-icon,
+        .play-btn:hover .pause-bars {
+            stroke-dashoffset: 0;
+            opacity: 1;
+            stroke: #333;
+            animation: btnWiggle 0.7s ease-in-out;
+        }
+
+        .play-btn:hover .btn-circle {
+            stroke-dashoffset: 0;
+            opacity: 1;
+        }
+
+        @keyframes btnWiggle {
+            0% { transform: translateX(0); }
+            30% { transform: translateX(-2px); }
+            50% { transform: translateX(2px); }
+            70% { transform: translateX(-1px); }
+            100% { transform: translateX(0); }
         }
         
         .time-info {
@@ -157,7 +203,7 @@ create_html_viewer() {
         
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, #34353a 0%, #d9d7dc 100%);
             border-radius: 4px;
             width: 0%;
             transition: width 0.1s ease;
@@ -172,10 +218,43 @@ create_html_viewer() {
         .volume-slider {
             width: 100px;
             height: 5px;
-            background: #e9ecef;
+            background: #9ca3af;
             border-radius: 3px;
             outline: none;
             cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 15px;
+            width: 15px;
+            border-radius: 50%;
+            background: #4b5563;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .volume-slider::-webkit-slider-thumb:hover {
+            background: #374151;
+            transform: scale(1.1);
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #4b5563;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .volume-slider::-moz-range-thumb:hover {
+            background: #374151;
+            transform: scale(1.1);
         }
         
         .transcript-section {
@@ -298,6 +377,180 @@ create_html_viewer() {
             font-weight: bold;
         }
         
+        /* Custom SVG Skip Buttons */
+        .skip-btn {
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            position: relative;
+            border: none;
+            background: transparent;
+            padding: 5px;
+        }
+
+        .skip-btn svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .skip-circle {
+            stroke: #333;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300;
+            transition: all 0.5s ease-in-out;
+            opacity: 0.3;
+        }
+
+        .skip-arrows {
+            stroke: #333;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 80;
+            stroke-dashoffset: 0;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .skip-btn:hover .skip-arrows {
+            stroke: #333;
+            animation: skipSlide 0.6s ease-in-out;
+        }
+
+        .skip-btn:hover .skip-circle {
+            stroke-dashoffset: 0;
+            opacity: 1;
+        }
+
+        .skip-btn.backward:hover .skip-arrows {
+            animation: skipSlideLeft 0.6s ease-in-out;
+        }
+
+        .skip-btn.forward:hover .skip-arrows {
+            animation: skipSlideRight 0.6s ease-in-out;
+        }
+
+        @keyframes skipSlideLeft {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(-2px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes skipSlideRight {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(2px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Custom Speed Buttons */
+        .speed-btn-svg {
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            position: relative;
+            border: none;
+            background: transparent;
+            padding: 5px;
+            margin: 0 2px;
+        }
+
+        .speed-btn-svg svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        .speed-circle {
+            stroke: #333;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 380;
+            stroke-dashoffset: 380;
+            transition: all 0.5s ease-in-out;
+            opacity: 0.3;
+        }
+
+        .speed-text {
+            fill: #333;
+            font-size: 18px;
+            font-weight: bold;
+            opacity: 1;
+            transition: all 0.6s ease-in-out;
+            text-anchor: middle;
+            font-family: Arial, sans-serif;
+        }
+
+        .speed-btn-svg:hover .speed-text {
+            fill: #333;
+            animation: speedWiggle 0.7s ease-in-out;
+        }
+
+        .speed-btn-svg:hover .speed-circle {
+            stroke-dashoffset: 0;
+            opacity: 1;
+        }
+
+        .speed-btn-svg.active .speed-circle {
+            stroke-dashoffset: 0;
+            opacity: 1;
+        }
+
+        .speed-btn-svg.active .speed-text {
+            fill: #333;
+        }
+
+        @keyframes speedWiggle {
+            0% { transform: translateX(0); }
+            30% { transform: translateX(-1px); }
+            50% { transform: translateX(1px); }
+            70% { transform: translateX(-0.5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        /* Custom Scroll Button */
+        .scroll-btn-svg {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid #ddd;
+            background: white;
+            color: #333;
+            border-radius: 6px;
+            padding: 0px 4px;
+            font-size: 0.85em;
+            font-weight: 500;
+            line-height: 1.2;
+            min-height: 20px;
+        }
+
+        .scroll-btn-svg:hover,
+        .scroll-btn-svg.active {
+            background: #f5f5f5;
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+        .scroll-btn-svg svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .scroll-text {
+            font-size: 0.85em;
+            font-weight: 500;
+            color: inherit;
+            line-height: 1;
+        }
+
+        .scroll-icon {
+            stroke: #333;
+            stroke-width: 2;
+            fill: none;
+        }
+        
         .controls-section {
             padding: 20px 30px;
             background: white;
@@ -413,7 +666,18 @@ create_html_viewer() {
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎙️ Audio Transcription Viewer</h1>
+            <h1><svg width="60" height="60" viewBox="0 0 100 100" style="vertical-align: text-bottom; margin-right: 10px;">
+                <rect x="35" y="20" width="30" height="45" rx="15" fill="none" stroke="#333" stroke-width="3"/>
+                <line x1="50" y1="70" x2="50" y2="85" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                <line x1="35" y1="85" x2="65" y2="85" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="50" cy="42" r="8" fill="#333"/>
+                <line x1="20" y1="35" x2="25" y2="35" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <line x1="20" y1="42" x2="25" y2="42" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <line x1="20" y1="49" x2="25" y2="49" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <line x1="75" y1="35" x2="80" y2="35" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <line x1="75" y1="42" x2="80" y2="42" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <line x1="75" y1="49" x2="80" y2="49" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+            </svg> Audio Transcription Viewer</h1>
             <p id="audioTitle">AUDIO_FILENAME</p>
         </div>
         
@@ -425,7 +689,14 @@ create_html_viewer() {
                 </audio>
                 
                 <div class="audio-controls">
-                    <button id="playBtn" class="play-btn">▶️</button>
+                    <button id="playBtn" class="play-btn">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="btn-circle" cx="50" cy="50" r="35"/>
+                            <polygon class="play-icon" points="40,30 40,70 70,50" stroke-linejoin="round"/>
+                            <line class="pause-bars" x1="42" y1="35" x2="42" y2="65"/>
+                            <line class="pause-bars" x1="58" y1="35" x2="58" y2="65"/>
+                        </svg>
+                    </button>
                     
                     <div class="time-info">
                         <span id="currentTime">00:00</span>
@@ -440,7 +711,11 @@ create_html_viewer() {
                     </div>
                     
                     <div class="volume-container">
-                        <span>🔊</span>
+                        <svg width="20" height="20" viewBox="0 0 100 100">
+                            <polygon points="20,35 20,65 35,65 55,80 55,20 35,35" fill="#333" stroke="none"/>
+                            <path d="M65,30 Q75,40 75,50 Q75,60 65,70" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M75,20 Q90,35 90,50 Q90,65 75,80" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
                         <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.1" value="1">
                     </div>
                 </div>
@@ -448,19 +723,61 @@ create_html_viewer() {
         </div>
         
         <div class="controls-section">
-            <button class="control-btn" onclick="skipTime(-10)">⏪ -10s</button>
-            <button class="control-btn" onclick="skipTime(10)">⏩ +10s</button>
+            <button class="skip-btn backward" onclick="skipTime(-10)">
+                <svg viewBox="0 0 100 100">
+                    <circle class="skip-circle" cx="50" cy="50" r="30"/>
+                    <polygon class="skip-arrows" points="45,35 30,50 45,65" stroke-linejoin="round"/>
+                    <polygon class="skip-arrows" points="65,35 50,50 65,65" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="skip-btn forward" onclick="skipTime(10)">
+                <svg viewBox="0 0 100 100">
+                    <circle class="skip-circle" cx="50" cy="50" r="30"/>
+                    <polygon class="skip-arrows" points="35,35 50,50 35,65" stroke-linejoin="round"/>
+                    <polygon class="skip-arrows" points="55,35 70,50 55,65" stroke-linejoin="round"/>
+                </svg>
+            </button>
             
             <div class="speed-control">
                 <span>Speed:</span>
-                <button class="speed-btn" onclick="setSpeed(0.5)">0.5x</button>
-                <button class="speed-btn active" onclick="setSpeed(1)">1x</button>
-                <button class="speed-btn" onclick="setSpeed(1.25)">1.25x</button>
-                <button class="speed-btn" onclick="setSpeed(1.5)">1.5x</button>
-                <button class="speed-btn" onclick="setSpeed(2)">2x</button>
+                <button class="speed-btn-svg" onclick="setSpeed(0.5)">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="speed-circle" cx="50" cy="50" r="30"/>
+                        <text class="speed-text" x="50" y="58">0.5x</text>
+                    </svg>
+                </button>
+                <button class="speed-btn-svg active" onclick="setSpeed(1)">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="speed-circle" cx="50" cy="50" r="30"/>
+                        <text class="speed-text" x="50" y="58">1x</text>
+                    </svg>
+                </button>
+                <button class="speed-btn-svg" onclick="setSpeed(1.25)">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="speed-circle" cx="50" cy="50" r="30"/>
+                        <text class="speed-text" x="50" y="58">1.25x</text>
+                    </svg>
+                </button>
+                <button class="speed-btn-svg" onclick="setSpeed(1.5)">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="speed-circle" cx="50" cy="50" r="30"/>
+                        <text class="speed-text" x="50" y="58">1.5x</text>
+                    </svg>
+                </button>
+                <button class="speed-btn-svg" onclick="setSpeed(2)">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="speed-circle" cx="50" cy="50" r="30"/>
+                        <text class="speed-text" x="50" y="58">2x</text>
+                    </svg>
+                </button>
             </div>
             
-            <button class="control-btn" onclick="toggleAutoScroll()">📜 Auto Scroll</button>
+            <button class="scroll-btn-svg" onclick="toggleAutoScroll()">
+                <svg viewBox="15 15 70 70">
+                    <path class="scroll-icon" d="M35,35 L50,20 L65,35 M35,45 L50,30 L65,45 M35,55 L50,40 L65,55 M35,65 L50,50 L65,65 M35,75 L50,60 L65,75" stroke-linejoin="round" stroke-linecap="round"/>
+                </svg>
+                <span class="scroll-text">Auto Scroll</span>
+            </button>
         </div>
         
         <div class="transcript-section">
@@ -510,9 +827,19 @@ create_html_viewer() {
             setupTranscript();
             setupAudioEvents();
             updateLanguageInfo();
+            initializeButtons();
             // Start pre-caching translations
             setTimeout(precacheTranslations, 1000); // Start after 1 second delay
         });
+        
+        function initializeButtons() {
+            // Initialize play button state (show play icon, hide pause bars)
+            const playIcon = playBtn.querySelector('.play-icon');
+            const pauseBars = playBtn.querySelectorAll('.pause-bars');
+            
+            if (playIcon) playIcon.style.opacity = '1';
+            pauseBars.forEach(bar => bar.style.opacity = '0');
+        }
         
         function setupTranscript() {
             let transcriptHTML = '';
@@ -830,13 +1157,20 @@ create_html_viewer() {
         }
         
         function togglePlayPause() {
+            const playIcon = playBtn.querySelector('.play-icon');
+            const pauseBars = playBtn.querySelectorAll('.pause-bars');
+            
             if (isPlaying) {
                 audio.pause();
-                playBtn.innerHTML = '▶️';
+                // Show play icon, hide pause bars
+                playIcon.style.opacity = '1';
+                pauseBars.forEach(bar => bar.style.opacity = '0');
                 isPlaying = false;
             } else {
                 audio.play();
-                playBtn.innerHTML = '⏸️';
+                // Hide play icon, show pause bars
+                playIcon.style.opacity = '0';
+                pauseBars.forEach(bar => bar.style.opacity = '1');
                 isPlaying = true;
             }
         }
@@ -903,10 +1237,23 @@ create_html_viewer() {
             audio.playbackRate = speed;
             
             // Update active speed button
+            document.querySelectorAll('.speed-btn-svg').forEach(btn => {
+                btn.classList.remove('active');
+            });
             document.querySelectorAll('.speed-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            
+            if (event && event.target) {
+                // Check if clicked element is the button or inside the button
+                let targetButton = event.target;
+                if (event.target.tagName === 'svg' || event.target.tagName === 'text' || event.target.tagName === 'circle') {
+                    targetButton = event.target.closest('button');
+                }
+                if (targetButton) {
+                    targetButton.classList.add('active');
+                }
+            }
         }
         
         function toggleAutoScroll() {
