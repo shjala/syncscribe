@@ -60,7 +60,7 @@ create_html_viewer() {
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ffffff;
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -76,10 +76,10 @@ create_html_viewer() {
         }
         
         .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #ffffff;
             padding: 30px;
             text-align: center;
-            color: white;
+            color: #333333;
         }
         
         .header h1 {
@@ -95,8 +95,8 @@ create_html_viewer() {
         
         .audio-section {
             padding: 30px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
         }
         
         .audio-player {
@@ -309,9 +309,9 @@ create_html_viewer() {
         
         .control-btn {
             padding: 10px 20px;
-            border: 2px solid #667eea;
+            border: 2px solid #ddd;
             background: white;
-            color: #667eea;
+            color: #333;
             border-radius: 25px;
             cursor: pointer;
             font-size: 0.9em;
@@ -321,8 +321,8 @@ create_html_viewer() {
         
         .control-btn:hover,
         .control-btn.active {
-            background: #667eea;
-            color: white;
+            background: #f5f5f5;
+            color: #333;
             transform: translateY(-2px);
         }
         
@@ -335,9 +335,9 @@ create_html_viewer() {
         .speed-btn {
             width: 35px;
             height: 35px;
-            border: 2px solid #667eea;
+            border: 2px solid #ddd;
             background: white;
-            color: #667eea;
+            color: #333;
             border-radius: 50%;
             cursor: pointer;
             font-size: 0.8em;
@@ -347,7 +347,7 @@ create_html_viewer() {
         
         .speed-btn:hover,
         .speed-btn.active {
-            background: #667eea;
+            background: #f5f5f5;
             color: white;
         }
         
@@ -388,6 +388,25 @@ create_html_viewer() {
             .speed-control {
                 justify-content: center;
             }
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px 30px;
+            border-top: 1px solid #e5e5e5;
+            background: white;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .footer a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -455,6 +474,10 @@ create_html_viewer() {
             <div id="transcriptContent" class="transcript-content">
                 <!-- Words will be inserted here -->
             </div>
+        </div>
+        
+        <div class="footer">
+            Made by <a href="https://github.com/shjala/syncscribe" target="_blank">SyncScribe</a>
         </div>
     </div>
 
