@@ -547,6 +547,11 @@ create_html_viewer() {
             
             if (!cleanWord || cleanWord.length < 2) return;
             
+            // Skip if language is English
+            if (!currentLanguage || currentLanguage === 'en' || currentLanguage === 'english') {
+                return;
+            }
+            
             // Check cache first
             const cacheKey = `${currentLanguage}-${cleanWord}`;
             if (translationCache.has(cacheKey)) {
@@ -558,37 +563,48 @@ create_html_viewer() {
             displayTooltip(element, 'Translating...');
             
             try {
-                // Use Google Translate API (free tier)
-                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanWord)}&langpair=${currentLanguage}|en`);
-                const data = await response.json();
-                
                 let translation = 'Translation not found';
-                if (data.responseStatus === 200 && data.responseData) {
-                    translation = data.responseData.translatedText;
+                
+                // Try Google Translate (unofficial) first
+                try {
+                    const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${currentLanguage}&tl=en&dt=t&q=${encodeURIComponent(cleanWord)}`);
                     
-                    // If it's the same as original, try alternative
-                    if (translation.toLowerCase() === cleanWord.toLowerCase()) {
-                        // Try LibreTranslate as backup
-                        const libResponse = await fetch('https://libretranslate.com/translate', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                q: cleanWord,
-                                source: currentLanguage,
-                                target: 'en'
-                            })
-                        });
-                        
-                        if (libResponse.ok) {
-                            const libData = await libResponse.json();
-                            if (libData.translatedText && libData.translatedText.toLowerCase() !== cleanWord.toLowerCase()) {
-                                translation = libData.translatedText;
-                            }
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data && data[0] && data[0][0] && data[0][0][0]) {
+                            translation = data[0][0][0];
                         }
                     }
+                } catch (err) {
+                    console.warn('Google Translate failed:', err);
                 }
+                
+                // Fallback to MyMemory if Google failed
+                if (translation === 'Translation not found') {
+                    try {
+                        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanWord)}&langpair=${currentLanguage}|en`, {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json',
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
+                                const translated = data.responseData.translatedText;
+                                // Check if it's not a quota error message
+                                if (!translated.includes('MYMEMORY WARNING') && !translated.includes('QUOTA')) {
+                                    translation = translated;
+                                }
+                            }
+                        }
+                    } catch (err) {
+                        console.warn('MyMemory API failed:', err);
+                    }
+                }
+                
+
                 
                 // Cache the result
                 translationCache.set(cacheKey, translation);
@@ -694,38 +710,36 @@ create_html_viewer() {
             if (translationCache.has(cacheKey)) return;
             
             try {
-                // Use the same translation logic as showTranslation
-                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanWord)}&langpair=${currentLanguage}|en`);
-                const data = await response.json();
-                
                 let translation = 'Translation not found';
-                if (data.responseStatus === 200 && data.responseData) {
-                    translation = data.responseData.translatedText;
+                
+                // Try Google Translate (unofficial) first
+                try {
+                    const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${currentLanguage}&tl=en&dt=t&q=${encodeURIComponent(cleanWord)}`);
                     
-                    // If it's the same as original, try alternative
-                    if (translation.toLowerCase() === cleanWord.toLowerCase()) {
-                        try {
-                            const libResponse = await fetch('https://libretranslate.com/translate', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    q: cleanWord,
-                                    source: currentLanguage,
-                                    target: 'en'
-                                })
-                            });
-                            
-                            if (libResponse.ok) {
-                                const libData = await libResponse.json();
-                                if (libData.translatedText && libData.translatedText.toLowerCase() !== cleanWord.toLowerCase()) {
-                                    translation = libData.translatedText;
-                                }
-                            }
-                        } catch (libError) {
-                            // Ignore backup API errors during pre-caching
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data && data[0] && data[0][0] && data[0][0][0]) {
+                            translation = data[0][0][0];
                         }
+                    }
+                } catch (err) {
+                    // Silently fail for pre-caching
+                }
+                
+                // Fallback to MyMemory if Google failed
+                if (translation === 'Translation not found') {
+                    try {
+                        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanWord)}&langpair=${currentLanguage}|en`);
+                        const data = await response.json();
+                        
+                        if (data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
+                            const translated = data.responseData.translatedText;
+                            if (!translated.includes('MYMEMORY WARNING') && !translated.includes('QUOTA')) {
+                                translation = translated;
+                            }
+                        }
+                    } catch (err) {
+                        // Silently fail for pre-caching
                     }
                 }
                 
