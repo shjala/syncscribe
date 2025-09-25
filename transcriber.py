@@ -405,5 +405,6 @@ def main():
     print(f"Language: {result['language']} (confidence: {result['language_probability']:.3f})")
     print(f"Duration: {result['duration']:.2f}s")
 
+
 if __name__ == "__main__":
     main()
