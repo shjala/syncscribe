@@ -1,6 +1,6 @@
 # SyncScribe 🎙️
 
-SyncScribe takes an audio file and generates a standalone HTML viewer with embedded audio and synchronized transcription. Words are highlighted as they're spoken, and hovering over any word provides instant English translation.
+SyncScribe takes an audio file and generates a standalone HTML viewer with embedded audio and synchronized transcription. Words are highlighted as they're spoken, and hovering over any word provides instant English translation. The generated file is fully self-contained and works completely offline, requiring no internet connection.
 
 It uses local OpenAI's Whisper models via faster-whisper, if GPU-acceleration is available, it will be used. Checkout [sample page](https://defense.sh/syncscribe/sample-audio/sample_viewer.html) for a demonstration.
 
